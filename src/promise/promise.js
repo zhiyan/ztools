@@ -11,8 +11,6 @@
 	"use strict";
 
 	var timer = typeof setImmediate === "function" ? setImmediate : setTimeout;
-	var queue = [];
-	var queueFail = [];
 	
 	function go( q, msg ){
 		timer(function(){
@@ -22,14 +20,17 @@
 		});
 	}
 	function resolve( msg ){
-		go(queue,msg);
+		go(this.queueSucc,msg);
 	}
 
 	function reject( msg ){
-		go(queueFial,msg);
+		go(this.queueFial,msg);
 	}
 
 	function Promise( fn ){
+
+		var that = this;
+
 		if( typeof fn !== 'function' ){
 			throw TypeError("Not a function.");
 		}
@@ -37,13 +38,24 @@
 			if( typeof resolve !== "function" || typeof reject !== "function" ){
 				throw TypeError("Not a function.");
 			}
-			queue.push(resolve);
-			queueFail.push(reject);
+			this.queueSucc.push(resolve);
+			this.queueFail.push(reject);
 		};
+
+		this.queueSucc = [];
+		this.queueFail = [];
+
 		try{
-			fn( resolve , reject );
+			fn.call( 
+				void 0, 
+				function( msg ){
+					resolve.call(that, msg);
+				} , 
+				function( msg ){
+					resolve.call(that, msg);
+				});
 		}catch( err ){
-			reject.call();
+			reject.call(this,err);
 		}
 		return this;
 	}
