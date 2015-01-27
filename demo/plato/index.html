@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../plato.js"></script>
+</head>
+<body>
+<div id="wrap"></div>
+	
+<script type="text/plato-template" id="template">
+<div class="post">
+  <h1>By {{author.firstName}}</h1>
+  <div class="body">{{body}}</div>
+
+  <h1>Comments</h1>
+
+  {{#each comments}}
+  <h2>By {{author.firstName}}</h2>
+  <div class="body">{{body}}</div>
+  {{/each}}
+</div>
+</script>
+<script>
+	var wrap = document.getElementById("wrap");
+	var html = document.getElementById("template").innerHTML;
+	var data =  {
+		  author: {firstName: "Alan", lastName: "Johnson"},
+		  body: "I Love Handlebars",
+		  comments: [{
+		    author: {firstName: "Yehuda", lastName: "Katz"},
+		    body: "Me too!"
+		  }]
+		};
+	var html= P(html,data);
+	wrap.innerHTML = html;
+</script>
+</body>
+</html>

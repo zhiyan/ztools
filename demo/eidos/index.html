@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../../dist/eidos/eidos.js"></script>
+</head>
+<body>
+
+<script>
+	var obj = new Eidos("obj");
+
+	obj.service("getName",function(){
+		return this.name;
+	});
+	obj.service("num",function(){
+		return 1231;
+	});
+
+	obj.controller(function( getName, num ){ 
+		document.write(getName())
+	});
+
+	obj.controller();
+</script>
+</body>
+</html>
